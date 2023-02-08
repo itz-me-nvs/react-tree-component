@@ -2,26 +2,34 @@ import {
   globalStateClassesMapping,
   GlobalStateSlot,
   RegisteredComponent,
+  TreeKeyof,
   TreeViewClassKey,
-} from './ComponentMetaData';
+} from "./ComponentMetaData";
 
 export class ComposeClass {
-  static getUtilityClass<T>(
+  static getUtilityClass<T, K>(
     ComponentName: RegisteredComponent,
-    slots: T
-  ): Partial<Record<GlobalStateSlot | TreeViewClassKey, string>> {
-    const prefix = 'state';
-    const output: Partial<Record<GlobalStateSlot | TreeViewClassKey, string>> =
-      {};
+    slots: T,
+    styleClasses?: K
+    // @ts-ignore
+  ): Partial<
+    Record<GlobalStateSlot | TreeViewClassKey | TreeKeyof<K>, string>
+  > {
+    const prefix = "state";
+    // @ts-ignore
+    const output: Partial<
+      Record<GlobalStateSlot | TreeViewClassKey | TreeKeyof<K>, string>
+    > = {};
 
-    Object.keys({ ...globalStateClassesMapping, ...slots }).forEach(
-      (key: string) => {
-        if (key in globalStateClassesMapping)
-          output[`${key}` as keyof typeof output] = `${prefix}-${key}`;
-        else
-          output[`${key}` as keyof typeof output] = `${ComponentName}-${key}`;
-      }
-    );
+    Object.keys({
+      ...globalStateClassesMapping,
+      ...slots,
+      ...styleClasses,
+    }).forEach((key: string) => {
+      if (key in globalStateClassesMapping)
+        output[`${key}` as keyof typeof output] = `${prefix}-${key}`;
+      else output[`${key}` as keyof typeof output] = `${ComponentName}-${key}`;
+    });
     return output;
   }
 }

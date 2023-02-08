@@ -1,0 +1,72 @@
+/* MuiTreeItem-content Mui-expanded Mui-selected */
+
+.CustomTreeItem-root {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+
+.CustomTreeItem-content {
+    padding: 0 8px;
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.CustomTreeView-content.state-selected {
+    background-color: rgba(25, 118, 210, 0.08);
+}
+
+.CustomTreeItem-content .iconContainer {
+    margin-right: 4px;
+    width: 15px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+} 
+
+.CustomTreeItem-content .CustomTreeItem-label {
+    width: 100%;
+    min-width: 0;
+    padding-left: 4px;
+    position: relative;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+}
+
+ul.CustomTreeItem-group {
+    margin-left: 15px;
+    padding-left: 18px;
+    border-left: 1px dashed rgb(255 255 255 / 50%);
+}
+
+.CustomTreeItem-group .CustomTreeItem-wrapper {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+}
+.CustomTreeItem-group .CustomTreeItem-wrapper > .CustomTreeItem-wrapperInner {
+    width: 100%;
+}

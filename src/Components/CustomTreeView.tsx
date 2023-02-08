@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import { TreeViewProps } from '../Shared/Models/treeModel';
-import { TreeClasses } from '../Shared/Utils/ComponentMetaData';
+import { TreeViewHTMLClasses } from '../Shared/Utils/ComponentMetaData';
 
 export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
-  const classes = TreeClasses;
+  const classes = TreeViewHTMLClasses;
   console.log(classes);
 
   const RootTreeElementRef = useRef<HTMLUListElement>(null);
