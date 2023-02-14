@@ -26,7 +26,7 @@
     background-color: rgba(25, 118, 210, 0.08);
 }
 
-.CustomTreeItem-content .iconContainer {
+.CustomTreeItem-content .CustomTreeItem-iconContainer {
     margin-right: 4px;
     width: 15px;
     display: -webkit-box;
@@ -41,6 +41,9 @@
     -webkit-justify-content: center;
     justify-content: center;
 } 
+.CustomTreeItem-content .CustomTreeItem-iconContainer svg.disabledSvgIcon {
+    opacity: 0.3;
+}
 
 .CustomTreeItem-content .CustomTreeItem-label {
     width: 100%;
@@ -58,6 +61,11 @@ ul.CustomTreeItem-group {
     margin-left: 15px;
     padding-left: 18px;
     border-left: 1px dashed rgb(255 255 255 / 50%);
+
+    height: auto;
+    min-height: 0px;
+    -webkit-transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
 .CustomTreeItem-group .CustomTreeItem-wrapper {

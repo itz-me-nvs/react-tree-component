@@ -2,6 +2,7 @@
 Global Component Definitions
 */
 
+import { TreeItemClasses, TreeViewClasses } from "../Models/treeModel";
 import { ComposeClass } from "./composeClasses";
 
 export type RegisteredComponent = "CustomTreeView" | "CustomTreeItem";
@@ -41,13 +42,6 @@ Tree view Meta data
 * Styled Class Names Object
 */
 
-export interface TreeViewClasses {
-  /** Styles applied to the root element. */
-  root: string;
-}
-
-export type TreeViewClassKey = keyof TreeViewClasses;
-
 export interface TreeViewStyleClasses {
   /** Styles applied to the root element. */
   content: string;
@@ -71,11 +65,6 @@ Tree Item Meta data
 * key enums
 * Styled Class Names Object
 */
-
-export interface TreeItemClasses {
-  /** Styles applied to the root element. */
-  root: string;
-}
 
 export interface TreeItemStyleClasses {
   /** Styles applied to the root element. */

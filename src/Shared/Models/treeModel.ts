@@ -1,11 +1,10 @@
 /*  Tree example Model */
 
-import { TreeViewClasses } from '../Utils/ComponentMetaData';
-import { AliasesCSSProperties } from './Component/Tree/AliasesCSSProperties';
-import { OverwriteCSSProperties } from './Component/Tree/OverwriteCSSProperties';
-import { StandardCSSProperties } from './Component/Tree/StandardCSSproperties';
-import { TransitionProps } from './Component/Tree/Transition';
-import * as CSS from './packages/cssType';
+import { AliasesCSSProperties } from "./Component/Tree/AliasesCSSProperties";
+import { OverwriteCSSProperties } from "./Component/Tree/OverwriteCSSProperties";
+import { StandardCSSProperties } from "./Component/Tree/StandardCSSproperties";
+import { TransitionProps } from "./Component/Tree/Transition";
+import * as CSS from "./packages/cssType";
 
 export interface TreeComponentModel {
   nodeId: any;
@@ -108,7 +107,7 @@ export interface TreeViewPropsBase
   /**
    * The Name of the component, it is used for className prefix
    */
-  componentName?: 'CustomTreeView';
+  componentName?: "CustomTreeView";
   /**
    * The content of the component.
    */
@@ -237,14 +236,21 @@ export type TreeViewProps =
   | SingleSelectTreeViewProps
   | MultiSelectTreeViewProps;
 
+export interface TreeViewClasses {
+  /** Styles applied to the root element. */
+  root: string;
+}
+
+export type TreeViewClassKey = keyof TreeViewClasses;
+
 /* TreeItem Component Model */
 // StandardProps<React.HTMLAttributes<HTMLLIElement>, 'onFocus'>
 export interface TreeItemProps
-  extends Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {
+  extends Omit<React.HTMLAttributes<HTMLLIElement>, "onFocus"> {
   /**
    * The Name of the component, it is used for className prefix
    */
-  componentName?: 'CustomTreeItem';
+  componentName?: "CustomTreeItem";
   /**
    * The content of the component.
    */
@@ -317,21 +323,21 @@ export interface TreeItemClasses {
   /** Styles applied to the root element. */
   root: string;
   /** Styles applied to the transition component. */
-  group: string;
+  group?: string;
   /** Styles applied to the content element. */
-  content: string;
+  content?: string;
   /** State class applied to the content element when expanded. */
-  expanded: string;
+  expanded?: string;
   /** State class applied to the content element when selected. */
-  selected: string;
+  selected?: string;
   /** State class applied to the content element when focused. */
-  focused: string;
+  focused?: string;
   /** State class applied to the element when disabled. */
-  disabled: string;
+  disabled?: string;
   /** Styles applied to the tree node icon. */
-  iconContainer: string;
+  iconContainer?: string;
   /** Styles applied to the label element. */
-  label: string;
+  label?: string;
 }
 
 export type TreeItemClassKey = keyof TreeItemClasses;
