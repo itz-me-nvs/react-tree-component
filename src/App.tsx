@@ -1,9 +1,13 @@
 import SvgIcon, { SvgIconProps } from "@mui/material/SvgIcon";
+import { useReducer } from "react";
+import { TreeContext, TreeInitialState, TreeReducer } from "../Context/reducer";
 import "./App.css";
 import { CustomTreeView } from "./Components/CustomTreeView";
 import CustomizedTreeView from "./customTree";
 
 function App() {
+  const [value, dispatch] = useReducer(TreeReducer, TreeInitialState);
+
   function MinusSquare(props: SvgIconProps) {
     return (
       <SvgIcon fontSize="inherit" style={{ width: 14, height: 14 }} {...props}>
@@ -48,16 +52,30 @@ function App() {
   return (
     <div className="App">
       <CustomizedTreeView />
-      <CustomTreeView
-        className="hello"
-        aria-label="Custom Tree"
-        id="1"
-        defaultCollapseIcon={<MinusSquare />}
-        defaultExpandIcon={<PlusSquare />}
-        defaultEndIcon={<CloseSquare />}
-      ></CustomTreeView>
+      <TreeContext.Provider value={{ state: value, dispatch }}>
+        <CustomTreeView
+          className="hello"
+          aria-label="Custom Tree"
+          id="1"
+          defaultCollapseIcon={<MinusSquare />}
+          defaultExpandIcon={<PlusSquare />}
+          defaultEndIcon={<CloseSquare />}
+        ></CustomTreeView>
+      </TreeContext.Provider>
     </div>
   );
 }
 
 export default App;
+
+/**
+
+Things to do:
+1. Item Expand/Collapse, Selection, Focused.
+2. Dynamic Content inside the tree item.
+
+3. Search an item in the tree.
+4. Drag and Drop.
+5. Add/Edit/Delete an item.
+
+ */

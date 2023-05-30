@@ -40,7 +40,7 @@
     -ms-flex-pack: center;
     -webkit-justify-content: center;
     justify-content: center;
-} 
+}
 .CustomTreeItem-content .CustomTreeItem-iconContainer svg.disabledSvgIcon {
     opacity: 0.3;
 }
@@ -77,4 +77,13 @@ ul.CustomTreeItem-group {
 }
 .CustomTreeItem-group .CustomTreeItem-wrapper > .CustomTreeItem-wrapperInner {
     width: 100%;
+}
+
+
+/* Focused | Hover | Selected state styles */
+.customTree-selected {
+    background-color: rgba(25, 118, 210, 0.08);
+}
+.CustomTreeItem-content:hover {
+    background-color: rgba(0, 0, 0, 0.04);
 }

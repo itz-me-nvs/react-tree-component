@@ -1,13 +1,54 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { TreeItemState } from "../Shared/Models/Component/Tree/StateModel";
 
 import { Collapse } from "@mui/material";
 import { animated, useSpring } from "react-spring";
+import { TreeContext } from "../../Context/reducer";
+import { TreeContextType } from "../Shared/Models/contextModel";
 import { TreeItemProps } from "../Shared/Models/treeModel";
 import { TreeItemHTMLClasses } from "../Shared/Utils/ComponentMetaData";
 import "../Styles/CustomTreeItem.style.css";
 
 export const CustomTreeItem = (props: TreeItemProps) => {
+
+
+  const {state, dispatch} = useContext<TreeContextType>(TreeContext);
+
+  // manage the state of tree item
+  const handleExpand = (nodeId: string) => {
+    dispatch({ type: "EXPAND_NODE", payload: nodeId });
+  };
+
+  // const handleCollapse = (nodeId) => {
+  //   dispatch({ type: actionTypes.COLLAPSE_NODE, payload: nodeId });
+  // };
+
+  // const handleSelect = (nodeId) => {
+  //   dispatch({ type: actionTypes.SELECT_NODE, payload: nodeId });
+  // };
+
+  // const handleFocus = (nodeId) => {
+  //   dispatch({ type: actionTypes.FOCUS_NODE, payload: nodeId });
+  // };
+
+  // const handleSearch = (query) => {
+  //   dispatch({ type: actionTypes.SEARCH, payload: query });
+  // };
+
+  // const handleAddNode = (parentNode, newNode) => {
+  //   dispatch({ type: actionTypes.ADD_NODE, payload: { parentNode, newNode } });
+  // };
+
+  // const handleUpdateNode = (nodeId, updatedNode) => {
+  //   dispatch({ type: actionTypes.UPDATE_NODE, payload: { nodeId, updatedNode } });
+  // };
+
+  // const handleDeleteNode = (nodeId) => {
+  //   dispatch({ type: actionTypes.DELETE_NODE, payload: nodeId });
+  // };
+
+  console.log(props);
+
   const classes = TreeItemHTMLClasses;
 
   const [TreeItemState, setTreeItemState] = useState<Partial<TreeItemState>>({
@@ -24,6 +65,15 @@ export const CustomTreeItem = (props: TreeItemProps) => {
     setTreeItemState((state) => ({
       ...state,
       expanded: state.expanded ? false : true,
+      selected: true,
+    }));
+  };
+
+  // remove the selected state from all the tree items except the current one
+  const removeSelectedState = () => {
+    setTreeItemState((state) => ({
+      ...state,
+      selected: false,
     }));
   };
 
@@ -48,10 +98,14 @@ export const CustomTreeItem = (props: TreeItemProps) => {
       tabIndex={Number(props.nodeId)}
     >
       {/* expanded - selected - focused */}
-      <div className={`${classes.content}`}>
+      <div
+        className={`${classes.content} ${
+          TreeItemState.selected ? "customTree-selected" : ""
+        }`}
+      >
         <div
           className={`${classes.iconContainer}`}
-          onClick={() => expandedHandler()}
+          onClick={() => handleExpand(props.nodeId)}
         >
           {props.children!.toString().length > 0
             ? TreeItemState.expanded

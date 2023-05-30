@@ -4135,10 +4135,11 @@ export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
       tabIndex={-1}
       ref={RootTreeElementRef}
     >
+      {/* NodeList[0].label */}
       <CustomTreeItem
         nodeId="2"
         componentName="CustomTreeItem"
-        label={NodeList[0].label}
+        label="Online Campus Solutions Product Links"
         key="1"
         expandIcon={props.defaultExpandIcon}
         endIcon={props.defaultEndIcon}
