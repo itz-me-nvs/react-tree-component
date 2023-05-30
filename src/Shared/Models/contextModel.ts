@@ -17,4 +17,14 @@ export type TreeContextType = {
 export type TreeContextActionType = {
   type: "EXPAND_NODE";
   payload: string;
-};
+}
+
+| {
+  type: "COLLAPSE_NODE";
+  payload: string;
+}
+|
+{
+  type: "SELECT_NODE";
+  payload: string;
+}

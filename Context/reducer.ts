@@ -27,6 +27,7 @@ export const ACTION_TYPES = {
 export const TreeReducer = (state: TreeInitialStateType, action: any) => {
   switch (action.type) {
     case ACTION_TYPES.EXPAND_NODE:
+     if(state.expandedNodes.includes(action.payload)) return state;
       return {
         ...state,
         expandedNodes: [...state.expandedNodes, action.payload],

@@ -12,20 +12,32 @@ import "../Styles/CustomTreeItem.style.css";
 export const CustomTreeItem = (props: TreeItemProps) => {
 
 
-  const {state, dispatch} = useContext<TreeContextType>(TreeContext);
+  const { state, dispatch } = useContext<TreeContextType>(TreeContext);
 
   // manage the state of tree item
+  const handleExpandOrCollapse = (nodeId: string) => {
+    if (isExpandedNodeIncludes()) {
+      handleCollapse(nodeId);
+    }
+    else {
+      handleExpand(nodeId);
+    }
+  };
+
+  console.log(state);
+
+
+  const handleCollapse = (nodeId: string) => {
+    dispatch({ type: "COLLAPSE_NODE", payload: nodeId });
+  };
+
   const handleExpand = (nodeId: string) => {
     dispatch({ type: "EXPAND_NODE", payload: nodeId });
   };
 
-  // const handleCollapse = (nodeId) => {
-  //   dispatch({ type: actionTypes.COLLAPSE_NODE, payload: nodeId });
-  // };
-
-  // const handleSelect = (nodeId) => {
-  //   dispatch({ type: actionTypes.SELECT_NODE, payload: nodeId });
-  // };
+  const handleSelect = (nodeId: string) => {
+    dispatch({ type: "SELECT_NODE", payload: nodeId });
+  };
 
   // const handleFocus = (nodeId) => {
   //   dispatch({ type: actionTypes.FOCUS_NODE, payload: nodeId });
@@ -77,11 +89,14 @@ export const CustomTreeItem = (props: TreeItemProps) => {
     }));
   };
 
+  const isExpandedNodeIncludes = () => {
+    return state.expandedNodes.includes(props.nodeId);
+  };
   // Tree expansion animation
 
   const springAnimation = useSpring({
-    opacity: TreeItemState.expanded ? 1 : 0,
-    transform: `translate3d(${TreeItemState.expanded ? 0 : 20}px,0,0)`,
+    opacity: isExpandedNodeIncludes() ? 1 : 0,
+    transform: `translate3d(${isExpandedNodeIncludes() ? 0 : 20}px,0,0)`,
     from: {
       opacity: 0,
       transform: "translate3d(20px,0,0)",
@@ -99,16 +114,16 @@ export const CustomTreeItem = (props: TreeItemProps) => {
     >
       {/* expanded - selected - focused */}
       <div
-        className={`${classes.content} ${
-          TreeItemState.selected ? "customTree-selected" : ""
-        }`}
+        className={`${classes.content} ${state.selectedNode === props.nodeId ? "customTree-selected" : ""
+          }`}
+        onClick={() => handleSelect(props.nodeId)}
       >
         <div
           className={`${classes.iconContainer}`}
-          onClick={() => handleExpand(props.nodeId)}
+          onClick={() => handleExpandOrCollapse(props.nodeId)}
         >
           {props.children!.toString().length > 0
-            ? TreeItemState.expanded
+            ? state.expandedNodes.includes(props.nodeId)
               ? props.collapseIcon
               : props.expandIcon
             : props.endIcon}
@@ -118,7 +133,9 @@ export const CustomTreeItem = (props: TreeItemProps) => {
       </div>
 
       <animated.div style={springAnimation}>
-        <Collapse in={TreeItemState.expanded} timeout="auto" unmountOnExit>
+        <Collapse in={
+          state.expandedNodes.includes(props.nodeId)
+        } timeout="auto" unmountOnExit>
           {
             <animated.ul
               role="group"
