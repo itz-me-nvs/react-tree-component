@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { TreeItemState } from "../Shared/Models/Component/Tree/StateModel";
 
+import { PlusIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { Collapse } from "@mui/material";
 import { animated, useSpring } from "react-spring";
 import { TreeContext } from "../../Context/reducer";
@@ -10,22 +11,20 @@ import { TreeItemHTMLClasses } from "../Shared/Utils/ComponentMetaData";
 import "../Styles/CustomTreeItem.style.css";
 
 export const CustomTreeItem = (props: TreeItemProps) => {
-
-
   const { state, dispatch } = useContext<TreeContextType>(TreeContext);
 
   // manage the state of tree item
   const handleExpandOrCollapse = (nodeId: string) => {
+    console.log(nodeId);
+
     if (isExpandedNodeIncludes()) {
       handleCollapse(nodeId);
-    }
-    else {
+    } else {
       handleExpand(nodeId);
     }
   };
 
   console.log(state);
-
 
   const handleCollapse = (nodeId: string) => {
     dispatch({ type: "COLLAPSE_NODE", payload: nodeId });
@@ -60,6 +59,8 @@ export const CustomTreeItem = (props: TreeItemProps) => {
   // };
 
   console.log(props);
+
+  // handling dynamic content values
 
   const classes = TreeItemHTMLClasses;
 
@@ -114,8 +115,10 @@ export const CustomTreeItem = (props: TreeItemProps) => {
     >
       {/* expanded - selected - focused */}
       <div
-        className={`${classes.content} ${state.selectedNode === props.nodeId ? "customTree-selected" : ""
-          }`}
+        aria-selected={state.selectedNode === props.nodeId}
+        className={`${classes.content} ${
+          state.selectedNode === props.nodeId ? "customTree-selected" : ""
+        }`}
         onClick={() => handleSelect(props.nodeId)}
       >
         <div
@@ -130,12 +133,45 @@ export const CustomTreeItem = (props: TreeItemProps) => {
         </div>
 
         <div className={`${classes.label}`}>{props.label}</div>
+
+        {/* Dynamic Contents here */}
+        <div
+          className="dynamic-content"
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <PlusIcon
+            color="#fff"
+            style={{
+              height: "20px",
+              width: "20px",
+              cursor: "pointer",
+              marginInlineEnd: "10px",
+              marginBlockEnd: "10px",
+            }}
+          />
+          <TrashIcon
+            color="red"
+            style={{
+              height: "20px",
+              width: "20px",
+              cursor: "pointer",
+              marginInlineEnd: "10px",
+              marginBlockEnd: "10px",
+            }}
+          />
+        </div>
       </div>
 
       <animated.div style={springAnimation}>
-        <Collapse in={
-          state.expandedNodes.includes(props.nodeId)
-        } timeout="auto" unmountOnExit>
+        <Collapse
+          in={state.expandedNodes.includes(props.nodeId)}
+          timeout="auto"
+          unmountOnExit
+        >
           {
             <animated.ul
               role="group"
