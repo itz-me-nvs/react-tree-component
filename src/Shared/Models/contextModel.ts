@@ -28,3 +28,11 @@ export type TreeContextActionType = {
   type: "SELECT_NODE";
   payload: string;
 }
+|
+{
+  type: "ADD_NODE";
+  payload: {
+    parentId: string;
+    newNode: TreeComponentModel;
+  };
+}

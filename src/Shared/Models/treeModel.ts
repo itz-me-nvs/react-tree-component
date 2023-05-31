@@ -10,7 +10,7 @@ export interface TreeComponentModel {
   nodeId: any;
   label: React.ReactNode;
   children: TreeComponentModel[];
-  labelCode: React.ReactNode;
+  labelCode: string;
 }
 
 export type AccountGroupModel = Partial<AccountGroup>;
@@ -28,6 +28,8 @@ export interface AccountGroup {
   LevelID?: number;
   children?: Partial<AccountGroup>[];
   NodeID: number;
+  ParentID: number;
+  ID: number;
 }
 
 /* TreeView Component Model */
@@ -302,6 +304,12 @@ export interface TreeItemProps
    * The id of the node.
    */
   nodeId: string;
+
+/**
+ * the labe lCode of the node.
+ */
+  labelCode: string;
+
   /**
    * The component used for the transition.
    * [Follow this guide](/material-ui/transitions/#transitioncomponent-prop) to learn more about the requirements for this component.

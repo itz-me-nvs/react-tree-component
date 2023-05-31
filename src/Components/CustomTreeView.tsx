@@ -26,6 +26,7 @@ export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
       <CustomTreeItem
         nodeId={node.nodeId?.toString()}
         label={node.label}
+        labelCode={node.labelCode}
         key={node?.nodeId}
         expandIcon={props.defaultExpandIcon}
         endIcon={props.defaultEndIcon}
@@ -4141,6 +4142,7 @@ export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
         componentName="CustomTreeItem"
         label="Online Campus Solutions Product Links"
         key="1"
+        labelCode="1"
         expandIcon={props.defaultExpandIcon}
         endIcon={props.defaultEndIcon}
         collapseIcon={props.defaultCollapseIcon}

@@ -58,6 +58,18 @@ export const TreeReducer = (state: TreeInitialStateType, action: any) => {
       // Logic to add a new node to the treeData array
       // You may need to recursively traverse the tree to find the parent node
       // and append the new node to its children array
+
+      console.log(state);
+
+      // find the parent node
+      state.treeData.forEach((node) => {
+        if (node.nodeId === action.payload.parentId) {
+          node.children.push(action.payload.newNode);
+        }
+      });
+
+      console.log(action.payload);
+      
       return {
         ...state,
         treeData: [],

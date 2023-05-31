@@ -6,7 +6,7 @@ import { Collapse } from "@mui/material";
 import { animated, useSpring } from "react-spring";
 import { TreeContext } from "../../Context/reducer";
 import { TreeContextType } from "../Shared/Models/contextModel";
-import { TreeItemProps } from "../Shared/Models/treeModel";
+import { TreeComponentModel, TreeItemProps } from "../Shared/Models/treeModel";
 import { TreeItemHTMLClasses } from "../Shared/Utils/ComponentMetaData";
 import "../Styles/CustomTreeItem.style.css";
 
@@ -46,9 +46,15 @@ export const CustomTreeItem = (props: TreeItemProps) => {
   //   dispatch({ type: actionTypes.SEARCH, payload: query });
   // };
 
-  // const handleAddNode = (parentNode, newNode) => {
-  //   dispatch({ type: actionTypes.ADD_NODE, payload: { parentNode, newNode } });
-  // };
+  const handleAddNode = (parentNode: string, newNode: TreeComponentModel) => {
+    dispatch({
+      type: "ADD_NODE",
+      payload: {
+        parentId: parentNode,
+        newNode,
+      }
+    });
+  };
 
   // const handleUpdateNode = (nodeId, updatedNode) => {
   //   dispatch({ type: actionTypes.UPDATE_NODE, payload: { nodeId, updatedNode } });
@@ -116,9 +122,8 @@ export const CustomTreeItem = (props: TreeItemProps) => {
       {/* expanded - selected - focused */}
       <div
         aria-selected={state.selectedNode === props.nodeId}
-        className={`${classes.content} ${
-          state.selectedNode === props.nodeId ? "customTree-selected" : ""
-        }`}
+        className={`${classes.content} ${state.selectedNode === props.nodeId ? "customTree-selected" : ""
+          }`}
         onClick={() => handleSelect(props.nodeId)}
       >
         <div
@@ -132,7 +137,7 @@ export const CustomTreeItem = (props: TreeItemProps) => {
             : props.endIcon}
         </div>
 
-        <div className={`${classes.label}`}>{props.label}</div>
+        <div className={`${classes.label}`}>{props.label} - {props.labelCode}</div>
 
         {/* Dynamic Contents here */}
         <div
@@ -144,6 +149,12 @@ export const CustomTreeItem = (props: TreeItemProps) => {
           }}
         >
           <PlusIcon
+            onClick={() => handleAddNode(props.labelCode, {
+              children: [],
+              label: "New Node",
+              labelCode: "New Node",
+              nodeId: "New Node",
+            })}
             color="#fff"
             style={{
               height: "20px",
