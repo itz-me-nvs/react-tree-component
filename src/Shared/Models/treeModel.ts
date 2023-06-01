@@ -306,7 +306,7 @@ export interface TreeItemProps
   nodeId: string;
 
 /**
- * the labe lCode of the node.
+ * the label Code of the node.
  */
   labelCode: string;
 

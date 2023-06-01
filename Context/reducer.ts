@@ -4,9 +4,10 @@ import {
   TreeInitialStateType,
 } from "../src/Shared/Models/contextModel";
 import { TreeComponentModel } from "../src/Shared/Models/treeModel";
+import { Label } from "@mui/icons-material";
 /* Initial State */
 export const TreeInitialState: TreeInitialStateType = {
-  treeData: [], // The initial tree data
+  treeData: null, // The initial tree data
   expandedNodes: [], // Nodes that are expanded
   selectedNode: null, // Currently selected node
   focusedNode: null, // Currently focused node
@@ -63,61 +64,109 @@ export const TreeReducer = (state: TreeInitialStateType, action: any) => {
       console.log(state);
 
       // Find the parent node based on the provided parentId
-      const updatedState = findParentNodeRecursion(
-        state.treeData,
+      const NewTreeState = findParentNodeAndAddChild(
+        state.treeData!,
         action.payload.parentId,
         (node: TreeComponentModel) => {
-          // Add the new node to the parent's children array
-          node.children.push(action.payload.newNode);
+          // node.children.push({
+          //   ...action.payload.newNode,
+          //   labelCode: `${node.labelCode}.${node.children.length + 1}`,
+          //   label: "New Node"
+          // });
+          // node.children[0].label = "New Node rerge";
+          //  const currentNode = node;
+          //  console.log(currentNode);
+           
+          node.children.push({
+           ...action.payload.newNode,
+            labelCode: `${node.labelCode}.${node.children.length + 1}`,
+            label: "New Node"
+          } as TreeComponentModel);
         }
       );
 
-      console.log(action.payload);
+      console.log(NewTreeState);
 
       return {
         ...state,
-        treeData: updatedState,
-      };
+        treeData: NewTreeState,
+      } as TreeInitialStateType;
     case ACTION_TYPES.UPDATE_NODE:
       // Logic to update a node in the treeData array based on the provided node ID
+         // Find the parent node based on the provided parentId
+      const updatedState = findParentNodeAndAddChild(
+        state.treeData!,
+        action.payload.parentId,
+        (node: TreeComponentModel) => {
+          node = {
+            ...action.payload.updatedNode,
+            label: Label + "- Updated",
+          };
+        }
+
+      );
+
+      console.log('updatedState', updatedState);
+      
       return {
         ...state,
-        treeData: [],
-      };
+        treeData: updatedState,
+      } as TreeInitialStateType;
     case ACTION_TYPES.DELETE_NODE:
       // Logic to delete a node from the treeData array based on the provided node ID
       return {
         ...state,
-        treeData: [],
-      };
+        treeData: null,
+      } as TreeInitialStateType;
     default:
       return state;
   }
 };
 
 /* Tree traveral helper functions for node creation and removal */
-function findParentNodeRecursion(
-  treeData: TreeComponentModel[],
-  nodeId: string,
-  callback: (node: TreeComponentModel) => void
-): TreeComponentModel[] {
-  return treeData.map((node: TreeComponentModel) => {
+
+
+function findParentNodeAndAddChild(node: TreeComponentModel, targetID: string, callback: (node: TreeComponentModel) => void){
+
+   //check of the current node is root node
+   if(node.labelCode === targetID){
     console.log(node);
-
-    // check if the current node is the parent node
-    if (node.labelCode === "1.1") {
-      console.log("herer");
-
-      callback(node);
-    }
-
-    node.children.forEach((childNode: TreeComponentModel) => {
-      console.log("i am her", childNode);
-
-      findParentNodeRecursion(childNode.children, nodeId, callback);
-    });
+   callback(node);
     return node;
-  });
+  }
+
+ for (let i = 0; i < node.children.length; i++) {
+    const child = node.children[i];
+    const result = findParentNodeAndAddChild(child, targetID, callback);
+    if (result) {
+      return node; // Return the updated tree object
+    }
+  }
+
 }
+
+// delete node item from tree
+function deleteNodeItem(node: TreeComponentModel, itemID: string){
+  // get parent node of the item
+  const parentNode = findParentNode(node, itemID);
+
+}
+
+// find parent node of the item
+function findParentNode(node: TreeComponentModel, itemID: string){
+  //check of the current node is root node
+  if(node.labelCode === itemID){
+    return node;
+  }
+
+  for (let i = 0; i < node.children.length; i++) {
+    const child = node.children[i];
+    const result = findParentNode(child, itemID);
+    if (result) {
+      return node; // Return the updated tree object
+    }
+  }
+}
+
 /* Context */
 export const TreeContext = createContext<TreeContextType>(undefined!);

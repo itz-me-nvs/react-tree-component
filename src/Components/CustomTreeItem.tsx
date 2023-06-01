@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { TreeItemState } from "../Shared/Models/Component/Tree/StateModel";
 
-import { PlusIcon, TrashIcon } from "@heroicons/react/20/solid";
+import { PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/20/solid";
 import { Collapse } from "@mui/material";
 import { animated, useSpring } from "react-spring";
 import { TreeContext } from "../../Context/reducer";
@@ -46,23 +46,29 @@ export const CustomTreeItem = (props: TreeItemProps) => {
   //   dispatch({ type: actionTypes.SEARCH, payload: query });
   // };
 
-  const handleAddNode = (parentNode: string, newNode: TreeComponentModel) => {
+  const handleAddNode = (parentNodeCode: string, newNode: TreeComponentModel) => {
     dispatch({
       type: "ADD_NODE",
       payload: {
-        parentId: parentNode,
+        parentId: parentNodeCode,
         newNode,
       },
     });
   };
 
-  // const handleUpdateNode = (nodeId, updatedNode) => {
-  //   dispatch({ type: actionTypes.UPDATE_NODE, payload: { nodeId, updatedNode } });
-  // };
+  const handleUpdateNode = (nodeCode: string, newNode: TreeComponentModel) => {
+    dispatch({
+      type: "UPDATE_NODE",
+      payload: {
+        parentId: nodeCode,
+        updatedNode: newNode,
+      },
+    });
+  };
 
-  // const handleDeleteNode = (nodeId) => {
-  //   dispatch({ type: actionTypes.DELETE_NODE, payload: nodeId });
-  // };
+  const handleDeleteNode = (nodeCode: string) => {
+    dispatch({ type: "DELETE_NODE", payload: nodeCode });
+  };
 
   // handling dynamic content values
 
@@ -120,16 +126,15 @@ export const CustomTreeItem = (props: TreeItemProps) => {
       {/* expanded - selected - focused */}
       <div
         aria-selected={state.selectedNode === props.nodeId}
-        className={`${classes.content} ${
-          state.selectedNode === props.nodeId ? "customTree-selected" : ""
-        }`}
+        className={`${classes.content} ${state.selectedNode === props.nodeId ? "customTree-selected" : ""
+          }`}
         onClick={() => handleSelect(props.nodeId)}
       >
         <div
           className={`${classes.iconContainer}`}
           onClick={() => handleExpandOrCollapse(props.nodeId)}
         >
-          {props.children!.toString().length > 0
+          {props.children?.toString().length! > 0
             ? state.expandedNodes.includes(props.nodeId)
               ? props.collapseIcon
               : props.expandIcon
@@ -167,7 +172,28 @@ export const CustomTreeItem = (props: TreeItemProps) => {
               marginBlockEnd: "10px",
             }}
           />
+
+          <PencilIcon
+            onClick={() =>
+              handleUpdateNode(props.labelCode, {
+                children: [],
+                label: "Updated Node",
+                labelCode: "New Node",
+                nodeId: "New Node",
+              })
+            }
+            color="#fff"
+            style={{
+              height: "20px",
+              width: "20px",
+              cursor: "pointer",
+              marginInlineEnd: "10px",
+              marginBlockEnd: "10px",
+            }}
+          />
+
           <TrashIcon
+            onClick={() => handleDeleteNode(props.labelCode)}
             color="red"
             style={{
               height: "20px",

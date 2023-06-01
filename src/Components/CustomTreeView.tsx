@@ -17,7 +17,7 @@ export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
         nodeId={node.nodeId?.toString()}
         label={node.label}
         labelCode={node.labelCode}
-        key={node?.nodeId}
+        key={node?.labelCode?.toString()}
         expandIcon={props.defaultExpandIcon}
         endIcon={props.defaultEndIcon}
         collapseIcon={props.defaultCollapseIcon}
@@ -48,7 +48,7 @@ export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
         endIcon={props.defaultEndIcon}
         collapseIcon={props.defaultCollapseIcon}
       >
-        {state.treeData[0].children.map((e: TreeComponentModel) =>
+        {state.treeData?.children.map((e: TreeComponentModel) =>
           TreeComponentGenerator(e)
         )}
       </CustomTreeItem>

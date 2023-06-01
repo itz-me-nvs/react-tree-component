@@ -6,6 +6,7 @@ import { CustomTreeView } from "./Components/CustomTreeView";
 import { TreeComponentModel } from "./Shared/Models/treeModel";
 import { DataToNode } from "./Shared/Utils/dataToModel";
 import CustomizedTreeView from "./customTree";
+import { TreeInitialStateType } from "./Shared/Models/contextModel";
 
 function App() {
   let complexDataModel = [
@@ -4095,10 +4096,13 @@ function App() {
     complexDataModel
   ) as TreeComponentModel[];
   console.log(NodeList);
-  const [value, dispatch] = useReducer(TreeReducer, {
-    ...TreeInitialState,
-    treeData: NodeList,
-  });
+  const [value, dispatch] = useReducer(
+    TreeReducer,
+    {
+      ...TreeInitialState,
+      treeData: NodeList[0],
+    }
+  )
 
   function MinusSquare(props: SvgIconProps) {
     return (
@@ -4143,8 +4147,9 @@ function App() {
 
   return (
     <div className="App">
-      <CustomizedTreeView />
+      {/* <CustomizedTreeView /> */}
       <TreeContext.Provider value={{ state: value, dispatch }}>
+        <input type="search" placeholder="Search a Node" />
         <CustomTreeView
           className="hello"
           aria-label="Custom Tree"

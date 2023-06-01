@@ -2,7 +2,7 @@ import React from "react";
 import { TreeComponentModel } from "./treeModel";
 
 export type TreeInitialStateType = {
-  treeData: TreeComponentModel[];
+  treeData: TreeComponentModel | null;
   expandedNodes: string[];
   selectedNode: string | null;
   focusedNode: string | null;
@@ -35,4 +35,16 @@ export type TreeContextActionType = {
     parentId: string;
     newNode: TreeComponentModel;
   };
+}
+| {
+  type: "UPDATE_NODE";
+  payload: {
+    parentId: string;
+    updatedNode: TreeComponentModel;
+  };
+}
+
+| {
+  type: "DELETE_NODE";
+  payload: string;
 }
