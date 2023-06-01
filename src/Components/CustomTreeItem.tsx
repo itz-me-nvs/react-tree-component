@@ -24,7 +24,7 @@ export const CustomTreeItem = (props: TreeItemProps) => {
     }
   };
 
-  console.log(state);
+  // console.log(state);
 
   const handleCollapse = (nodeId: string) => {
     dispatch({ type: "COLLAPSE_NODE", payload: nodeId });
@@ -52,7 +52,7 @@ export const CustomTreeItem = (props: TreeItemProps) => {
       payload: {
         parentId: parentNode,
         newNode,
-      }
+      },
     });
   };
 
@@ -63,8 +63,6 @@ export const CustomTreeItem = (props: TreeItemProps) => {
   // const handleDeleteNode = (nodeId) => {
   //   dispatch({ type: actionTypes.DELETE_NODE, payload: nodeId });
   // };
-
-  console.log(props);
 
   // handling dynamic content values
 
@@ -122,8 +120,9 @@ export const CustomTreeItem = (props: TreeItemProps) => {
       {/* expanded - selected - focused */}
       <div
         aria-selected={state.selectedNode === props.nodeId}
-        className={`${classes.content} ${state.selectedNode === props.nodeId ? "customTree-selected" : ""
-          }`}
+        className={`${classes.content} ${
+          state.selectedNode === props.nodeId ? "customTree-selected" : ""
+        }`}
         onClick={() => handleSelect(props.nodeId)}
       >
         <div
@@ -137,7 +136,9 @@ export const CustomTreeItem = (props: TreeItemProps) => {
             : props.endIcon}
         </div>
 
-        <div className={`${classes.label}`}>{props.label} - {props.labelCode}</div>
+        <div className={`${classes.label}`}>
+          {props.label} - {props.labelCode}
+        </div>
 
         {/* Dynamic Contents here */}
         <div
@@ -149,12 +150,14 @@ export const CustomTreeItem = (props: TreeItemProps) => {
           }}
         >
           <PlusIcon
-            onClick={() => handleAddNode(props.labelCode, {
-              children: [],
-              label: "New Node",
-              labelCode: "New Node",
-              nodeId: "New Node",
-            })}
+            onClick={() =>
+              handleAddNode(props.labelCode, {
+                children: [],
+                label: "New Node",
+                labelCode: "New Node",
+                nodeId: "New Node",
+              })
+            }
             color="#fff"
             style={{
               height: "20px",
