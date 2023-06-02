@@ -1,8 +1,6 @@
-import { useContext, useState } from "react";
-import { TreeItemState } from "../Shared/Models/Component/Tree/StateModel";
+import { useContext } from "react";
 
-import { PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/20/solid";
-import { Collapse } from "@mui/material";
+import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { animated, useSpring } from "react-spring";
 import { TreeContext } from "../../Context/reducer";
 import { TreeContextType } from "../Shared/Models/contextModel";
@@ -14,39 +12,36 @@ export const CustomTreeItem = (props: TreeItemProps) => {
   const { state, dispatch } = useContext<TreeContextType>(TreeContext);
 
   // manage the state of tree item
-  const handleExpandOrCollapse = (nodeId: string) => {
-    console.log(nodeId);
+  const handleExpandOrCollapse = (labelCode: string) => {
+    console.log(labelCode);
 
     if (isExpandedNodeIncludes()) {
-      handleCollapse(nodeId);
+      handleCollapse(labelCode);
     } else {
-      handleExpand(nodeId);
+      handleExpand(labelCode);
     }
   };
 
-  // console.log(state);
-
-  const handleCollapse = (nodeId: string) => {
-    dispatch({ type: "COLLAPSE_NODE", payload: nodeId });
+  const handleCollapse = (labelCode: string) => {
+    dispatch({ type: "COLLAPSE_NODE", payload: labelCode });
   };
 
-  const handleExpand = (nodeId: string) => {
-    dispatch({ type: "EXPAND_NODE", payload: nodeId });
+  const handleExpand = (labelCode: string) => {
+    dispatch({ type: "EXPAND_NODE", payload: labelCode });
   };
 
-  const handleSelect = (nodeId: string) => {
-    dispatch({ type: "SELECT_NODE", payload: nodeId });
+  const handleSelect = (labelCode: string) => {
+    dispatch({ type: "SELECT_NODE", payload: labelCode });
   };
-
-  // const handleFocus = (nodeId) => {
-  //   dispatch({ type: actionTypes.FOCUS_NODE, payload: nodeId });
-  // };
 
   // const handleSearch = (query) => {
   //   dispatch({ type: actionTypes.SEARCH, payload: query });
   // };
 
-  const handleAddNode = (parentNodeCode: string, newNode: TreeComponentModel) => {
+  const handleAddNode = (
+    parentNodeCode: string,
+    newNode: TreeComponentModel
+  ) => {
     dispatch({
       type: "ADD_NODE",
       payload: {
@@ -70,47 +65,19 @@ export const CustomTreeItem = (props: TreeItemProps) => {
     dispatch({ type: "DELETE_NODE", payload: nodeCode });
   };
 
-  // handling dynamic content values
-
   const classes = TreeItemHTMLClasses;
 
-  const [TreeItemState, setTreeItemState] = useState<Partial<TreeItemState>>({
-    parentID: 1,
-    disabled: false,
-    descendantElement: null,
-    expanded: false,
-    focused: false,
-    group: false,
-    selected: false,
-  });
-
-  const expandedHandler = () => {
-    setTreeItemState((state) => ({
-      ...state,
-      expanded: state.expanded ? false : true,
-      selected: true,
-    }));
-  };
-
-  // remove the selected state from all the tree items except the current one
-  const removeSelectedState = () => {
-    setTreeItemState((state) => ({
-      ...state,
-      selected: false,
-    }));
-  };
-
   const isExpandedNodeIncludes = () => {
-    return state.expandedNodes.includes(props.nodeId);
+    return state.expandedNodes.includes(props.labelCode);
   };
-  // Tree expansion animation
 
+  // Tree expansion animation
   const springAnimation = useSpring({
     opacity: isExpandedNodeIncludes() ? 1 : 0,
-    transform: `translate3d(${isExpandedNodeIncludes() ? 0 : 20}px,0,0)`,
+    transform: `translate3d(${isExpandedNodeIncludes() ? 0 : 10}px,0,0)`,
     from: {
       opacity: 0,
-      transform: "translate3d(20px,0,0)",
+      transform: "translate3d(10px,0,0)",
     },
   });
 
@@ -118,24 +85,24 @@ export const CustomTreeItem = (props: TreeItemProps) => {
     <li
       className={`${classes.root}`}
       role="treeitem"
-      aria-expanded={TreeItemState.expanded}
-      id={props.nodeId}
-      aria-selected={TreeItemState.selected}
-      tabIndex={Number(props.nodeId)}
+      aria-expanded={isExpandedNodeIncludes()}
+      id={props.labelCode}
+      aria-selected={state.selectedNode === props.labelCode}
     >
       {/* expanded - selected - focused */}
       <div
-        aria-selected={state.selectedNode === props.nodeId}
-        className={`${classes.content} ${state.selectedNode === props.nodeId ? "customTree-selected" : ""
-          }`}
-        onClick={() => handleSelect(props.nodeId)}
+        aria-selected={state.selectedNode === props.labelCode}
+        className={`${classes.content} ${
+          state.selectedNode === props.labelCode ? "customTree-selected" : ""
+        }`}
+        onClick={() => handleSelect(props.labelCode)}
       >
         <div
           className={`${classes.iconContainer}`}
-          onClick={() => handleExpandOrCollapse(props.nodeId)}
+          onClick={() => handleExpandOrCollapse(props.labelCode)}
         >
           {props.children?.toString().length! > 0
-            ? state.expandedNodes.includes(props.nodeId)
+            ? isExpandedNodeIncludes()
               ? props.collapseIcon
               : props.expandIcon
             : props.endIcon}
@@ -206,26 +173,20 @@ export const CustomTreeItem = (props: TreeItemProps) => {
         </div>
       </div>
 
-      <animated.div style={springAnimation}>
-        <Collapse
-          in={state.expandedNodes.includes(props.nodeId)}
-          timeout="auto"
-          unmountOnExit
-        >
-          {
-            <animated.ul
-              role="group"
-              className={`${classes.group}`}
-              style={springAnimation}
-            >
-              <div className={`${classes.wrapper}`}>
-                <div className={`${classes.wrapperInner}`}>
-                  {props.children}
-                </div>
-              </div>
-            </animated.ul>
-          }
-        </Collapse>
+      <animated.div
+        style={{
+          ...springAnimation,
+          display: "grid",
+          gridTemplateRows: `${isExpandedNodeIncludes() ? "1fr" : "0fr"}`,
+          overflow: "hidden",
+          transition: "grid-template-rows 600ms",
+        }}
+      >
+        <animated.ul role="group" className={`${classes.group}`}>
+          <div className={`${classes.wrapper} overflow-hidden`}>
+            <div className={`${classes.wrapperInner}`}>{props.children}</div>
+          </div>
+        </animated.ul>
       </animated.div>
     </li>
   );

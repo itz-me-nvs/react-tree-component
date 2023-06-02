@@ -7,8 +7,6 @@ import { CustomTreeItem } from "./CustomTreeItem";
 
 export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
   const classes = TreeViewHTMLClasses;
-  console.log("view", props);
-
   const { state } = useContext<TreeContextType>(TreeContext);
 
   const TreeComponentGenerator = (node: TreeComponentModel) => {
@@ -37,11 +35,10 @@ export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
       className={classes.root}
       tabIndex={-1}
     >
-      {/* NodeList[0].label */}
       <CustomTreeItem
         nodeId="1"
         componentName="CustomTreeItem"
-        label="Online Campus Solutions Product Links"
+        label="Online Campus Solutions Menu Links"
         key="1"
         labelCode="1"
         expandIcon={props.defaultExpandIcon}
@@ -52,32 +49,6 @@ export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
           TreeComponentGenerator(e)
         )}
       </CustomTreeItem>
-      {/* {props.children} */}
     </ul>
   );
 };
-
-/* Models */
-// public class ProductsModules
-// {
-//     public short ModuleID { get; set; }
-//     public string ModuleName { get; set; }
-//     public short ProductID { get; set; }
-//     public string Description { get; set; }
-//     public int ModuleOrder { get; set; }
-//     public int LoginUserID { get; set; }
-// }
-
-// public class ProductMenuLinks
-//     {
-//         public int ProductLinkID { get; set; }
-//         public short ProductID { get; set; }
-//         public short ModuleID { get; set; }
-//         public int MenuLinkID { get; set; }
-//         public string PrivilegeName { get; set; }
-//         public string HelpFilePath { get; set; }
-//         public string Keywords { get; set; }
-//         public string MenuURL { get; set; }
-//         public int MenuOrder { get; set; }
-//         public int LoginUserID { get; set; }
-//     }

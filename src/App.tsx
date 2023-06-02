@@ -5,8 +5,6 @@ import "./App.css";
 import { CustomTreeView } from "./Components/CustomTreeView";
 import { TreeComponentModel } from "./Shared/Models/treeModel";
 import { DataToNode } from "./Shared/Utils/dataToModel";
-import CustomizedTreeView from "./customTree";
-import { TreeInitialStateType } from "./Shared/Models/contextModel";
 
 function App() {
   let complexDataModel = [
@@ -4095,14 +4093,10 @@ function App() {
   let NodeList: TreeComponentModel[] = DataToNode(
     complexDataModel
   ) as TreeComponentModel[];
-  console.log(NodeList);
-  const [value, dispatch] = useReducer(
-    TreeReducer,
-    {
-      ...TreeInitialState,
-      treeData: NodeList[0],
-    }
-  )
+  const [value, dispatch] = useReducer(TreeReducer, {
+    ...TreeInitialState,
+    treeData: NodeList[0],
+  });
 
   function MinusSquare(props: SvgIconProps) {
     return (
@@ -4145,11 +4139,39 @@ function App() {
     );
   }
 
+  /* Expand / Collapse All Tree items */
+  const ExpandAll = () => {};
+
+  const CollapseAll = () => {
+    dispatch({ type: "COLLAPSE_ALL" });
+  };
+
   return (
     <div className="App">
-      {/* <CustomizedTreeView /> */}
       <TreeContext.Provider value={{ state: value, dispatch }}>
-        <input type="search" placeholder="Search a Node" />
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+            padding: "10px",
+            alignItems: "center",
+          }}
+        >
+          <button
+            className="btn"
+            onClick={() => dispatch({ type: "EXPAND_ALL_NODES" })}
+          >
+            Expand All
+          </button>
+
+          <button
+            className="btn ml-2"
+            onClick={() => dispatch({ type: "COLLAPSE_ALL_NODES" })}
+          >
+            Collapse All
+          </button>
+        </div>
         <CustomTreeView
           className="hello"
           aria-label="Custom Tree"
@@ -4164,15 +4186,3 @@ function App() {
 }
 
 export default App;
-
-/**
-
-Things to do:
-1. Item Expand/Collapse, Selection, Focused.
-2. Dynamic Content inside the tree item.
-
-3. Search an item in the tree.
-4. Drag and Drop.
-5. Add/Edit/Delete an item.
-
- */

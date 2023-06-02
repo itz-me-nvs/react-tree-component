@@ -7,6 +7,8 @@ export type TreeInitialStateType = {
   selectedNode: string | null;
   focusedNode: string | null;
   searchQuery: string;
+  expandedAll: boolean;
+  collapsedAll: boolean;
 };
 
 export type TreeContextType = {
@@ -14,37 +16,40 @@ export type TreeContextType = {
   dispatch: React.Dispatch<TreeContextActionType>;
 };
 
-export type TreeContextActionType = {
-  type: "EXPAND_NODE";
-  payload: string;
-}
-
-| {
-  type: "COLLAPSE_NODE";
-  payload: string;
-}
-|
-{
-  type: "SELECT_NODE";
-  payload: string;
-}
-|
-{
-  type: "ADD_NODE";
-  payload: {
-    parentId: string;
-    newNode: TreeComponentModel;
-  };
-}
-| {
-  type: "UPDATE_NODE";
-  payload: {
-    parentId: string;
-    updatedNode: TreeComponentModel;
-  };
-}
-
-| {
-  type: "DELETE_NODE";
-  payload: string;
-}
+export type TreeContextActionType =
+  | {
+      type: "EXPAND_NODE";
+      payload: string;
+    }
+  | {
+      type: "COLLAPSE_NODE";
+      payload: string;
+    }
+  | {
+      type: "SELECT_NODE";
+      payload: string;
+    }
+  | {
+      type: "ADD_NODE";
+      payload: {
+        parentId: string;
+        newNode: TreeComponentModel;
+      };
+    }
+  | {
+      type: "UPDATE_NODE";
+      payload: {
+        parentId: string;
+        updatedNode: TreeComponentModel;
+      };
+    }
+  | {
+      type: "DELETE_NODE";
+      payload: string;
+    }
+  | {
+      type: "EXPAND_ALL_NODES";
+    }
+  | {
+      type: "COLLAPSE_ALL_NODES";
+    };
