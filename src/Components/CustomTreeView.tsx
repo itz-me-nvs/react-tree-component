@@ -1,11 +1,11 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { TreeContext } from "../../Context/reducer";
 import { TreeContextType } from "../Shared/Models/contextModel";
 import { TreeComponentModel, TreeViewProps } from "../Shared/Models/treeModel";
 import { TreeViewHTMLClasses } from "../Shared/Utils/ComponentMetaData";
-import { CustomTreeItem } from "./CustomTreeItem";
+import CustomTreeItem from "./CustomTreeItem";
 
-export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
+const CustomTreeView = (props: TreeViewProps): JSX.Element => {
   const classes = TreeViewHTMLClasses;
   const { state } = useContext<TreeContextType>(TreeContext);
 
@@ -45,10 +45,12 @@ export const CustomTreeView = (props: TreeViewProps): JSX.Element => {
         endIcon={props.defaultEndIcon}
         collapseIcon={props.defaultCollapseIcon}
       >
-        {state.treeData?.children.map((e: TreeComponentModel) =>
+        {state.treeData?.children?.map((e: TreeComponentModel) =>
           TreeComponentGenerator(e)
         )}
       </CustomTreeItem>
     </ul>
   );
 };
+
+export default memo(CustomTreeView);

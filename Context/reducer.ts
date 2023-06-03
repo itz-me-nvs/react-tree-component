@@ -30,6 +30,8 @@ export const ACTION_TYPES = {
 };
 
 export const TreeReducer = (state: TreeInitialStateType, action: any) => {
+  console.log("functioning");
+
   switch (action.type) {
     case ACTION_TYPES.EXPAND_NODE:
       if (state.expandedNodes.includes(action.payload)) return state;
@@ -59,7 +61,7 @@ export const TreeReducer = (state: TreeInitialStateType, action: any) => {
         ...state,
         searchQuery: action.payload,
       };
-    case ACTION_TYPES.ADD_NODE:
+    case "ADD_NODE":
       // Logic to add a new node to the treeData array
       // You may need to recursively traverse the tree to find the parent node
       // and append the new node to its children array
@@ -88,7 +90,6 @@ export const TreeReducer = (state: TreeInitialStateType, action: any) => {
         state.treeData!,
         action.payload.parentId,
         (updatedNode: TreeComponentModel) => {
-          // change the updated node label and code
           updatedNode.label = updatedNode.label + " updated";
         }
       );

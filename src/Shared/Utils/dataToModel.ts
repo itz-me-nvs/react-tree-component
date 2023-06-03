@@ -8,34 +8,36 @@ export const DataToNode = (data: AccountGroupModel[]) => {
   let TreeMap = new Map<number, TreeComponentModel>();
   var NodeLength: number = 0;
 
+  console.log("DataToNode", data);
 
   const TreeMapToComponentNode = (
     data: AccountGroupModel[],
     rootNodeID: number = 0,
     nodeId: number = 1,
-    labelCode: string = '',
+    labelCode: string = ""
   ) => {
-    
     let NodeList = DynamicNodeID(
       data.filter((e) => e.ParentGroupID === rootNodeID),
       nodeId
     );
     NodeLength += NodeList.length;
-    
-    
-    return NodeList.reduce((prev, current: any, currentIndex: number) => {   
+
+    return NodeList.reduce((prev, current: any, currentIndex: number) => {
       let childCode = currentIndex + 1;
-      current.children = TreeMapToComponentNode(data, current.ID, NodeLength, labelCode + childCode + '.');
+      current.children = TreeMapToComponentNode(
+        data,
+        current.ID,
+        NodeLength,
+        labelCode + childCode + "."
+      );
       return prev.concat({
         label: current.Name,
         nodeId: current.NodeID,
         children: current.children,
-        labelCode: `${labelCode}${childCode}`
+        labelCode: `${labelCode}${childCode}`,
       } as any);
     }, []);
   };
-
-
 
   // Generating Tree Component Model
   let TreeMapToComponentNodeList = TreeMapToComponentNode(data);
@@ -50,4 +52,3 @@ const DynamicNodeID = (NodeList: Partial<AccountGroup>[], NodeID: number) => {
   });
   return NodeList;
 };
-

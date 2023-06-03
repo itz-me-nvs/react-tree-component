@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { memo, useCallback, useContext } from "react";
 
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { animated, useSpring } from "react-spring";
@@ -8,13 +8,10 @@ import { TreeComponentModel, TreeItemProps } from "../Shared/Models/treeModel";
 import { TreeItemHTMLClasses } from "../Shared/Utils/ComponentMetaData";
 import "../Styles/CustomTreeItem.style.css";
 
-export const CustomTreeItem = (props: TreeItemProps) => {
+const CustomTreeItem = (props: TreeItemProps) => {
   const { state, dispatch } = useContext<TreeContextType>(TreeContext);
-
   // manage the state of tree item
   const handleExpandOrCollapse = (labelCode: string) => {
-    console.log(labelCode);
-
     if (isExpandedNodeIncludes()) {
       handleCollapse(labelCode);
     } else {
@@ -23,14 +20,19 @@ export const CustomTreeItem = (props: TreeItemProps) => {
   };
 
   const handleCollapse = (labelCode: string) => {
+    console.log("collapsed");
     dispatch({ type: "COLLAPSE_NODE", payload: labelCode });
   };
 
   const handleExpand = (labelCode: string) => {
+    console.log("expanded");
+
     dispatch({ type: "EXPAND_NODE", payload: labelCode });
   };
 
   const handleSelect = (labelCode: string) => {
+    console.log("selected");
+
     dispatch({ type: "SELECT_NODE", payload: labelCode });
   };
 
@@ -38,18 +40,18 @@ export const CustomTreeItem = (props: TreeItemProps) => {
   //   dispatch({ type: actionTypes.SEARCH, payload: query });
   // };
 
-  const handleAddNode = (
-    parentNodeCode: string,
-    newNode: TreeComponentModel
-  ) => {
-    dispatch({
-      type: "ADD_NODE",
-      payload: {
-        parentId: parentNodeCode,
-        newNode,
-      },
-    });
-  };
+  const handleAddNode = useCallback(
+    (parentNodeCode: string, newNode: TreeComponentModel) => {
+      dispatch({
+        type: "ADD_NODE",
+        payload: {
+          parentId: parentNodeCode,
+          newNode,
+        },
+      });
+    },
+    [dispatch]
+  );
 
   const handleUpdateNode = (nodeCode: string, newNode: TreeComponentModel) => {
     dispatch({
@@ -61,9 +63,9 @@ export const CustomTreeItem = (props: TreeItemProps) => {
     });
   };
 
-  const handleDeleteNode = (nodeCode: string) => {
+  const handleDeleteNode = useCallback((nodeCode: string) => {
     dispatch({ type: "DELETE_NODE", payload: nodeCode });
-  };
+  }, []);
 
   const classes = TreeItemHTMLClasses;
 
@@ -191,3 +193,5 @@ export const CustomTreeItem = (props: TreeItemProps) => {
     </li>
   );
 };
+
+export default memo(CustomTreeItem);

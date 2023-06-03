@@ -1,8 +1,8 @@
 import SvgIcon, { SvgIconProps } from "@mui/material/SvgIcon";
-import { useReducer } from "react";
+import React, { memo, useMemo, useReducer } from "react";
 import { TreeContext, TreeInitialState, TreeReducer } from "../Context/reducer";
 import "./App.css";
-import { CustomTreeView } from "./Components/CustomTreeView";
+import CustomTreeView from "./Components/CustomTreeView";
 import { TreeComponentModel } from "./Shared/Models/treeModel";
 import { DataToNode } from "./Shared/Utils/dataToModel";
 
@@ -4090,13 +4090,22 @@ function App() {
     },
   ];
 
-  let NodeList: TreeComponentModel[] = DataToNode(
-    complexDataModel
-  ) as TreeComponentModel[];
+  const NodeList: TreeComponentModel[] = useMemo(() => {
+    return DataToNode(complexDataModel);
+  }, []);
+
   const [value, dispatch] = useReducer(TreeReducer, {
     ...TreeInitialState,
     treeData: NodeList[0],
   });
+
+  const UserMemoizedState = useMemo(
+    () => ({
+      state: value,
+      dispatch,
+    }),
+    [value, dispatch]
+  );
 
   function MinusSquare(props: SvgIconProps) {
     return (
@@ -4139,50 +4148,45 @@ function App() {
     );
   }
 
-  /* Expand / Collapse All Tree items */
-  const ExpandAll = () => {};
-
-  const CollapseAll = () => {
-    dispatch({ type: "COLLAPSE_ALL" });
-  };
-
   return (
-    <div className="App">
-      <TreeContext.Provider value={{ state: value, dispatch }}>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
-            padding: "10px",
-            alignItems: "center",
-          }}
-        >
-          <button
-            className="btn"
-            onClick={() => dispatch({ type: "EXPAND_ALL_NODES" })}
+    <React.StrictMode>
+      <TreeContext.Provider value={UserMemoizedState}>
+        <div className="App">
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+              padding: "10px",
+              alignItems: "center",
+            }}
           >
-            Expand All
-          </button>
+            <button
+              className="btn"
+              // onClick={() => dispatch({ type: "EXPAND_ALL_NODES" })}
+            >
+              Expand All
+            </button>
 
-          <button
-            className="btn ml-2"
-            onClick={() => dispatch({ type: "COLLAPSE_ALL_NODES" })}
-          >
-            Collapse All
-          </button>
+            <button
+              className="btn ml-2"
+              // onClick={() => dispatch({ type: "COLLAPSE_ALL_NODES" })}
+            >
+              Collapse All
+            </button>
+          </div>
+          <CustomTreeView
+            className="hello"
+            aria-label="Custom Tree"
+            id="1"
+            defaultCollapseIcon={<MinusSquare />}
+            defaultExpandIcon={<PlusSquare />}
+            defaultEndIcon={<CloseSquare />}
+          ></CustomTreeView>
         </div>
-        <CustomTreeView
-          className="hello"
-          aria-label="Custom Tree"
-          id="1"
-          defaultCollapseIcon={<MinusSquare />}
-          defaultExpandIcon={<PlusSquare />}
-          defaultEndIcon={<CloseSquare />}
-        ></CustomTreeView>
       </TreeContext.Provider>
-    </div>
+    </React.StrictMode>
   );
 }
 
-export default App;
+export default memo(App);
