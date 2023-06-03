@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from "react";
+import { useContext } from "react";
 
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { animated, useSpring } from "react-spring";
@@ -20,19 +20,14 @@ const CustomTreeItem = (props: TreeItemProps) => {
   };
 
   const handleCollapse = (labelCode: string) => {
-    console.log("collapsed");
     dispatch({ type: "COLLAPSE_NODE", payload: labelCode });
   };
 
   const handleExpand = (labelCode: string) => {
-    console.log("expanded");
-
     dispatch({ type: "EXPAND_NODE", payload: labelCode });
   };
 
   const handleSelect = (labelCode: string) => {
-    console.log("selected");
-
     dispatch({ type: "SELECT_NODE", payload: labelCode });
   };
 
@@ -40,18 +35,18 @@ const CustomTreeItem = (props: TreeItemProps) => {
   //   dispatch({ type: actionTypes.SEARCH, payload: query });
   // };
 
-  const handleAddNode = useCallback(
-    (parentNodeCode: string, newNode: TreeComponentModel) => {
-      dispatch({
-        type: "ADD_NODE",
-        payload: {
-          parentId: parentNodeCode,
-          newNode,
-        },
-      });
-    },
-    [dispatch]
-  );
+  const handleAddNode = (
+    parentNodeCode: string,
+    newNode: TreeComponentModel
+  ) => {
+    dispatch({
+      type: "ADD_NODE",
+      payload: {
+        parentId: parentNodeCode,
+        newNode,
+      },
+    });
+  };
 
   const handleUpdateNode = (nodeCode: string, newNode: TreeComponentModel) => {
     dispatch({
@@ -63,9 +58,9 @@ const CustomTreeItem = (props: TreeItemProps) => {
     });
   };
 
-  const handleDeleteNode = useCallback((nodeCode: string) => {
+  const handleDeleteNode = (nodeCode: string) => {
     dispatch({ type: "DELETE_NODE", payload: nodeCode });
-  }, []);
+  };
 
   const classes = TreeItemHTMLClasses;
 
@@ -194,4 +189,4 @@ const CustomTreeItem = (props: TreeItemProps) => {
   );
 };
 
-export default memo(CustomTreeItem);
+export default CustomTreeItem;

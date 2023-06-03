@@ -30,8 +30,8 @@ export const ACTION_TYPES = {
 };
 
 export const TreeReducer = (state: TreeInitialStateType, action: any) => {
-  console.log("functioning");
-
+  // Clone the necessary objects from the original state
+  const clonedTreeData = deepClone(state.treeData);
   switch (action.type) {
     case ACTION_TYPES.EXPAND_NODE:
       if (state.expandedNodes.includes(action.payload)) return state;
@@ -61,14 +61,14 @@ export const TreeReducer = (state: TreeInitialStateType, action: any) => {
         ...state,
         searchQuery: action.payload,
       };
-    case "ADD_NODE":
+    case ACTION_TYPES.ADD_NODE:
       // Logic to add a new node to the treeData array
       // You may need to recursively traverse the tree to find the parent node
       // and append the new node to its children array
 
       // Find the parent node based on the provided parentId
       const NewTreeState = findParentNodeAndAddChild(
-        state.treeData!,
+        clonedTreeData! as TreeComponentModel,
         action.payload.parentId,
         (node: TreeComponentModel) => {
           node.children.push({
@@ -76,6 +76,8 @@ export const TreeReducer = (state: TreeInitialStateType, action: any) => {
             labelCode: `${node.labelCode}.${node.children.length + 1}`,
             label: "New Node",
           } as TreeComponentModel);
+
+          return node;
         }
       );
 
@@ -86,11 +88,13 @@ export const TreeReducer = (state: TreeInitialStateType, action: any) => {
     case ACTION_TYPES.UPDATE_NODE:
       // Logic to update a node in the treeData array based on the provided node ID
       // Find the parent node based on the provided parentId
+
       const updatedState = findParentNodeAndAddChild(
-        state.treeData!,
+        clonedTreeData! as TreeComponentModel,
         action.payload.parentId,
         (updatedNode: TreeComponentModel) => {
-          updatedNode.label = updatedNode.label + " updated";
+          updatedNode.label = updatedNode.label + " (updated)";
+          return updatedNode;
         }
       );
 
@@ -100,7 +104,7 @@ export const TreeReducer = (state: TreeInitialStateType, action: any) => {
       } as TreeInitialStateType;
     case ACTION_TYPES.DELETE_NODE:
       // Find the parent node based on the provided parentId;
-      const deletedState = deleteNodeItem(state.treeData!, action.payload);
+      const deletedState = deleteNodeItem(clonedTreeData, action.payload);
 
       return {
         ...state,
@@ -139,12 +143,11 @@ export const TreeReducer = (state: TreeInitialStateType, action: any) => {
 function findParentNodeAndAddChild(
   node: TreeComponentModel,
   targetID: string,
-  callback?: (node: TreeComponentModel) => void
+  callback?: (node: TreeComponentModel) => TreeComponentModel
 ) {
   //check of the current node is root node
   if (node.labelCode === targetID) {
-    callback!(node);
-    return node; // Return the updated tree object
+    return callback ? callback(node) : node; // Return the updated tree object
   }
 
   for (let i = 0; i < node.children.length; i++) {
@@ -218,6 +221,10 @@ function getAllLabelCodes(tree: TreeComponentModel) {
     }
   }
   return labelCodes;
+}
+
+function deepClone(obj: any) {
+  return JSON.parse(JSON.stringify(obj));
 }
 
 /* Context */
